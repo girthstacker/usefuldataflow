@@ -176,7 +176,7 @@ export default function NewsFeed() {
       ws.onerror = () => ws.close();
     }
 
-    connect();
+      connect();
     return () => { clearTimeout(retryTimer); ws?.close(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeFilter, tickerFilter]);

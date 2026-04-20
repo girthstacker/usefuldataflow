@@ -153,7 +153,7 @@ class NewsFeedManager:
         results = await asyncio.gather(*tasks, return_exceptions=True)
         for src, result in zip(RSS_SOURCES, results):
             if isinstance(result, Exception):
-                logger.debug("Feed error [%s]: %s", src["name"], result)
+                logger.warning("Feed error [%s]: %s", src["name"], result)
 
         await self._broadcast({"type": "polled", "at": datetime.utcnow().isoformat(), "sources": len(RSS_SOURCES)})
 
@@ -173,7 +173,7 @@ class NewsFeedManager:
                 timeout=20.0,
             )
         except (asyncio.TimeoutError, Exception) as exc:
-            logger.debug("feedparser error [%s]: %s", source["name"], exc)
+            logger.warning("feedparser error [%s]: %s", source["name"], exc)
             return
 
         cutoff = datetime.utcnow() - timedelta(hours=48)  # skip very old items
