@@ -12,6 +12,4 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def auth_status():
     """Return auth status for all connected brokers."""
     schwab = get_token_status()
-    return {
-        "schwab": schwab
-    }
+    return {"schwab": schwab}

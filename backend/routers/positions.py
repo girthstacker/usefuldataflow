@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.models.db import Position, get_db
-from backend.services import robinhood, schwab
+from backend.services import schwab
 
 router = APIRouter(prefix="/positions", tags=["positions"])
 
@@ -60,21 +60,6 @@ async def sync_schwab(db: AsyncSession = Depends(get_db)):
     await db.commit()
     return {"synced": synced}
 
-
-@router.post("/sync/robinhood")
-async def sync_robinhood(db: AsyncSession = Depends(get_db)):
-    try:
-        equity = robinhood.get_positions()
-        options = robinhood.get_option_positions()
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=str(exc))
-
-    for item in equity + options:
-        pos = Position(**item)
-        db.add(pos)
-
-    await db.commit()
-    return {"synced": len(equity) + len(options)}
 
 
 @router.delete("/{position_id}")

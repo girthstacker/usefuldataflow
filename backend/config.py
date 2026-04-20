@@ -13,10 +13,6 @@ class Settings(BaseSettings):
 
     ANTHROPIC_API_KEY: str = ""
 
-    ROBINHOOD_USERNAME: str = ""
-    ROBINHOOD_PASSWORD: str = ""
-    ROBINHOOD_MFA_CODE: str = ""
-
     SECRET_KEY: str = "change-me"
     CORS_ORIGINS: str = "http://localhost:5173"
 
