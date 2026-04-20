@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPositions, syncSchwab, syncRobinhood, deletePosition } from "../api";
+import { getPositions, syncSchwab, deletePosition } from "../api";
 
 interface Position {
   id: number;
@@ -127,11 +127,10 @@ export default function PositionsDashboard() {
 
   useEffect(() => { load(); }, []);
 
-  async function handleSync(source: "schwab" | "robinhood") {
-    setSyncing(source);
+  async function handleSync() {
+    setSyncing("schwab");
     try {
-      if (source === "schwab") await syncSchwab();
-      else await syncRobinhood();
+      await syncSchwab();
       await load();
     } catch {
       // backend offline / not authed
@@ -158,11 +157,8 @@ export default function PositionsDashboard() {
 
       {/* toolbar */}
       <div className="shrink-0 flex items-center gap-3 px-3 py-2 border-b border-border bg-panel flex-wrap">
-        <button className="t-btn text-[10px]" onClick={() => handleSync("schwab")} disabled={!!syncing}>
+        <button className="t-btn text-[10px]" onClick={() => handleSync()} disabled={!!syncing}>
           {syncing === "schwab" ? "syncing…" : "↻ SCHWAB"}
-        </button>
-        <button className="t-btn text-[10px]" onClick={() => handleSync("robinhood")} disabled={!!syncing}>
-          {syncing === "robinhood" ? "syncing…" : "↻ ROBINHOOD"}
         </button>
 
         {useMock && (
@@ -290,7 +286,7 @@ export default function PositionsDashboard() {
 
         {!loading && displayed.length === 0 && (
           <div className="flex items-center justify-center h-32 text-muted text-[11px]">
-            No positions — sync from Schwab or Robinhood
+            No positions — sync from Schwab
           </div>
         )}
       </div>

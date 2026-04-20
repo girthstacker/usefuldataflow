@@ -49,8 +49,6 @@ export const ALERTS_WS = () =>
 // Positions
 export const getPositions = () => api.get("/positions").then((r) => r.data);
 export const syncSchwab = () => api.post("/positions/sync/schwab").then((r) => r.data);
-export const syncRobinhood = () =>
-  api.post("/positions/sync/robinhood").then((r) => r.data);
 export const deletePosition = (id: number) =>
   api.delete(`/positions/${id}`).then((r) => r.data);
 
