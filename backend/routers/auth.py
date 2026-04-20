@@ -13,6 +13,5 @@ async def auth_status():
     """Return auth status for all connected brokers."""
     schwab = get_token_status()
     return {
-        "schwab": schwab,
-        "robinhood": {"linked": False, "reason": "not configured"},
+        "schwab": schwab
     }
