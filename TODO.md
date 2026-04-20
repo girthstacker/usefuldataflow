@@ -15,7 +15,6 @@
 ---
 
 ## Backlog
-- [ ] **Robinhood integration** — credentials wired into config, `robinhood.py` scaffolded, needs `robin_stocks` calls for positions sync
 - [ ] **Options chain — live greeks** — chain currently shows snapshot IV/delta from Polygon; add real-time greek streaming
 - [ ] **Watchlist persistence** — symbols added in the UI are lost on refresh; save to DB (WatchlistItem model exists, just not wired to the UI add/remove)
 - [ ] **News feed — more sources** — Seeking Alpha sometimes rate-limits; investigate and add fallback sources
@@ -37,5 +36,5 @@
 - [x] News feed — 9 RSS sources, Claude Haiku scoring, SEC always shown, live WS stream, filter bar, last poll timestamp
 - [x] Schwab auth status indicator in footer
 - [x] Keyboard shortcuts (1–7) for tab switching
-- [x] ET clock + market session label (pre/regular/after hours)
+- [x] CST clock + market session label (pre/regular/after hours)
 - [x] DB schema — all models in SQLAlchemy, SQLite default, async
