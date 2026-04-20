@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  @apply bg-surface text-bright font-mono text-xs;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── scrollbars ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-border2 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-dim; }
+
+/* ── table base ── */
+table { border-collapse: collapse; width: 100%; }
+th { @apply text-muted font-normal text-left; }
+td, th { @apply px-2 py-[3px]; }
+
+/* ── terminal input ── */
+.t-input {
+  @apply bg-surface border border-border rounded px-2 py-1 text-bright
+         focus:outline-none focus:border-accent transition-colors text-xs;
+}
+
+/* ── terminal button ── */
+.t-btn {
+  @apply border border-border text-dim rounded px-2 py-0.5 text-xs
+         hover:border-border2 hover:text-bright transition-colors;
+}
+.t-btn.active {
+  @apply border-accent text-accent;
+}
+
+/* ── score badge ── */
+.score-extreme { @apply text-extreme font-bold; }
+.score-unusual { @apply text-gold font-semibold; }
+.score-notable { @apply text-bull; }
+.score-low     { @apply text-muted; }
+
+/* ── price flash ── */
+.flash-up   { animation: flash-green 0.7s ease-out forwards; }
+.flash-down { animation: flash-red   0.7s ease-out forwards; }
+
+/* ── new flow row ── */
+.row-new { animation: slide-in 0.15s ease-out forwards; }
+
+/* ── live dot ── */
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  @apply bg-bull;
+  animation: pulse-dot 2s ease-in-out infinite;
+  display: inline-block;
+}
+.live-dot.offline { @apply bg-bear; animation: none; }
+.live-dot.connecting { @apply bg-gold; }
