@@ -28,7 +28,11 @@ RSS_SOURCES = [
     {"name": "WSJ Markets",       "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",                                                                    "type": "social"},
     # Regulatory
     {"name": "SEC EDGAR 8-K",     "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&dateb=&owner=include&count=10&output=atom",     "type": "sec"},
+    # High-priority political
+    {"name": "Trump / Google News",  "url": "https://news.google.com/rss/search?q=Trump+tariff+OR+trade+OR+market+OR+stock+OR+economy+OR+crypto&hl=en-US&gl=US&ceid=US:en", "type": "social"},
 ]
+
+TRUMP_SOURCES = {"Trump / Google News"}
 
 # Words that look like tickers but aren't
 _EXCLUDE = frozenset({
@@ -231,8 +235,11 @@ class NewsFeedManager:
 
     async def _score_and_persist(self, item: dict) -> None:
         is_sec = item["source_type"] == "sec"
+        is_trump = item["source"] in TRUMP_SOURCES
 
-        if self._anthropic:
+        if is_trump:
+            scored = {"score": 10, "summary": "Trump post — potential market impact.", "tags": ["trump", "geopolitical"]}
+        elif self._anthropic:
             try:
                 async with self._claude_sem:
                     scored = await self._score_with_claude(item)
@@ -279,6 +286,7 @@ class NewsFeedManager:
             "tags":        scored.get("tags", []),
             "published_at": item["published_at"].isoformat(),
             "created_at":  datetime.utcnow().isoformat(),
+            "trump_alert":  is_trump,
         }
         await self._broadcast(payload)
 

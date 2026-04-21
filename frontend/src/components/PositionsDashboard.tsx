@@ -91,7 +91,7 @@ function Summary({ equity, opts }: { equity: Position[]; opts: Position[] }) {
     <div className="shrink-0 flex gap-6 px-4 py-3 border-b border-border bg-panel">
       {metrics.map(({ label, value, color }) => (
         <div key={label} className="flex flex-col gap-0.5">
-          <span className="text-[9px] text-muted tracking-widest uppercase">{label}</span>
+          <span className="text-[10px] text-muted tracking-widest uppercase">{label}</span>
           <span className={`text-sm font-semibold tabular-nums ${color ?? "text-bright"}`}>{value}</span>
         </div>
       ))}
@@ -157,19 +157,19 @@ export default function PositionsDashboard() {
 
       {/* toolbar */}
       <div className="shrink-0 flex items-center gap-3 px-3 py-2 border-b border-border bg-panel flex-wrap">
-        <button className="t-btn text-[10px]" onClick={() => handleSync()} disabled={!!syncing}>
+        <button className="t-btn text-[11px]" onClick={() => handleSync()} disabled={!!syncing}>
           {syncing === "schwab" ? "syncing…" : "↻ SCHWAB"}
         </button>
 
         {useMock && (
-          <span className="text-gold text-[10px] ml-1">
+          <span className="text-gold text-[11px] ml-1">
             ⚠ mock data — connect Schwab to see real positions
           </span>
         )}
 
         <div className="flex-1" />
-        {loading && <span className="text-muted text-[10px]">loading…</span>}
-        <span className="text-muted text-[10px]">
+        {loading && <span className="text-muted text-[11px]">loading…</span>}
+        <span className="text-muted text-[11px]">
           {equity.length} equity · {opts.length} options
         </span>
       </div>
@@ -181,10 +181,10 @@ export default function PositionsDashboard() {
         {equity.length > 0 && (
           <div>
             <div className="sticky top-0 z-10">
-              <div className="px-3 py-1 bg-panel text-[10px] text-bull tracking-widest border-b border-border">
+              <div className="px-3 py-1 bg-panel text-[11px] text-bull tracking-widest border-b border-border">
                 ── EQUITY ──
               </div>
-              <div className="flex text-[9px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
+              <div className="flex text-[10px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
                 <div className="w-[80px] shrink-0 px-3 py-1">Symbol</div>
                 <div className="w-[64px] shrink-0 px-2 py-1 text-right">Shares</div>
                 <div className="w-[80px] shrink-0 px-2 py-1 text-right">Avg Cost</div>
@@ -200,7 +200,7 @@ export default function PositionsDashboard() {
               const { total, pct } = equityPnl(p);
               return (
                 <div key={p.id}
-                  className="flex items-center text-[11px] tabular-nums border-b border-border hover:bg-panel2/50 transition-colors">
+                  className="flex items-center text-[12px] tabular-nums border-b border-border hover:bg-panel2/50 transition-colors">
                   <div className="w-[80px] shrink-0 px-3 py-[5px] font-bold text-bright">{p.symbol}</div>
                   <div className="w-[64px] shrink-0 px-2 py-[5px] text-right text-dim">{p.quantity}</div>
                   <div className="w-[80px] shrink-0 px-2 py-[5px] text-right text-dim">${f2(p.avg_cost)}</div>
@@ -209,11 +209,11 @@ export default function PositionsDashboard() {
                   <div className={`w-[72px] shrink-0 px-2 py-[5px] text-right ${pnlColor(pct)}`}>
                     {pct != null ? `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%` : "—"}
                   </div>
-                  <div className="flex-1 px-2 py-[5px] text-right text-muted text-[10px]">{p.source}</div>
+                  <div className="flex-1 px-2 py-[5px] text-right text-muted text-[11px]">{p.source}</div>
                   <div className="w-8 px-2 py-[5px] text-center">
                     {p.id > 0 && (
                       <button onClick={() => handleDelete(p.id)}
-                        className="text-muted hover:text-bear text-[10px] leading-none">✕</button>
+                        className="text-muted hover:text-bear text-[11px] leading-none">✕</button>
                     )}
                   </div>
                 </div>
@@ -226,10 +226,10 @@ export default function PositionsDashboard() {
         {opts.length > 0 && (
           <div>
             <div className="sticky top-0 z-10">
-              <div className="px-3 py-1 bg-panel text-[10px] text-accent tracking-widest border-b border-border border-t">
+              <div className="px-3 py-1 bg-panel text-[11px] text-accent tracking-widest border-b border-border border-t">
                 ── OPTIONS ──
               </div>
-              <div className="flex text-[9px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
+              <div className="flex text-[10px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
                 <div className="w-[72px] shrink-0 px-3 py-1">Symbol</div>
                 <div className="w-[44px] shrink-0 px-2 py-1 text-center">Type</div>
                 <div className="w-[72px] shrink-0 px-2 py-1 text-right">Strike</div>
@@ -252,16 +252,16 @@ export default function PositionsDashboard() {
                 : null;
               return (
                 <div key={p.id}
-                  className="flex items-center text-[11px] tabular-nums border-b border-border hover:bg-panel2/50 transition-colors">
+                  className="flex items-center text-[12px] tabular-nums border-b border-border hover:bg-panel2/50 transition-colors">
                   <div className="w-[72px] shrink-0 px-3 py-[5px] font-bold text-bright">{p.symbol}</div>
                   <div className={`w-[44px] shrink-0 px-2 py-[5px] text-center font-semibold ${isCall ? "text-bull" : "text-bear"}`}>
                     {isCall ? "CALL" : "PUT"}
                   </div>
                   <div className="w-[72px] shrink-0 px-2 py-[5px] text-right text-bright">${f2(p.strike)}</div>
-                  <div className="w-[80px] shrink-0 px-2 py-[5px] text-right text-dim text-[10px]">
+                  <div className="w-[80px] shrink-0 px-2 py-[5px] text-right text-dim text-[11px]">
                     {p.expiry?.slice(5)}
                     {dte != null && (
-                      <span className={`ml-1 text-[9px] ${dte <= 7 ? "text-bear" : dte <= 30 ? "text-gold" : "text-muted"}`}>
+                      <span className={`ml-1 text-[10px] ${dte <= 7 ? "text-bear" : dte <= 30 ? "text-gold" : "text-muted"}`}>
                         {dte}d
                       </span>
                     )}
@@ -271,11 +271,11 @@ export default function PositionsDashboard() {
                   <div className="w-[80px] shrink-0 px-2 py-[5px] text-right text-bright">{p.last != null ? `$${f2(p.last)}` : "—"}</div>
                   <div className="w-[48px] shrink-0 px-2 py-[5px] text-right text-muted">{p.delta != null ? p.delta.toFixed(2) : "—"}</div>
                   <div className={`w-[96px] shrink-0 px-2 py-[5px] text-right font-semibold ${pnlColor(total)}`}>{pnlFmt(total)}</div>
-                  <div className="flex-1 px-2 py-[5px] text-right text-muted text-[10px]">{p.source}</div>
+                  <div className="flex-1 px-2 py-[5px] text-right text-muted text-[11px]">{p.source}</div>
                   <div className="w-8 px-2 py-[5px] text-center">
                     {p.id > 0 && (
                       <button onClick={() => handleDelete(p.id)}
-                        className="text-muted hover:text-bear text-[10px] leading-none">✕</button>
+                        className="text-muted hover:text-bear text-[11px] leading-none">✕</button>
                     )}
                   </div>
                 </div>
@@ -285,14 +285,14 @@ export default function PositionsDashboard() {
         )}
 
         {!loading && displayed.length === 0 && (
-          <div className="flex items-center justify-center h-32 text-muted text-[11px]">
+          <div className="flex items-center justify-center h-32 text-muted text-[12px]">
             No positions — sync from Schwab
           </div>
         )}
       </div>
 
       {/* legend */}
-      <div className="shrink-0 border-t border-border px-3 py-1 flex gap-4 text-[10px] text-muted bg-panel">
+      <div className="shrink-0 border-t border-border px-3 py-1 flex gap-4 text-[11px] text-muted bg-panel">
         <span className="text-bull">▲ profit</span>
         <span className="text-bear">▼ loss</span>
         <div className="flex-1" />

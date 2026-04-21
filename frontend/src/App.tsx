@@ -6,9 +6,10 @@ import OptionsChain from "./components/OptionsChain";
 import FlowFeed from "./components/FlowFeed";
 import PositionsDashboard from "./components/PositionsDashboard";
 import AlertsPanel from "./components/AlertsPanel";
+import MarketPanel from "./components/MarketPanel";
 import { getStreamStatus, getAuthStatus } from "./api";
 
-type Tab = "watchlist" | "news" | "chart" | "chain" | "flow" | "positions" | "alerts";
+type Tab = "watchlist" | "news" | "chart" | "chain" | "flow" | "positions" | "alerts" | "market";
 
 const TABS: { id: Tab; label: string; key: string }[] = [
   { id: "watchlist", label: "WATCHLIST", key: "1" },
@@ -18,6 +19,7 @@ const TABS: { id: Tab; label: string; key: string }[] = [
   { id: "flow",      label: "FLOW FEED", key: "5" },
   { id: "positions", label: "POSITIONS", key: "6" },
   { id: "alerts",    label: "ALERTS",    key: "7" },
+  { id: "market",    label: "MARKET",    key: "8" },
 ];
 
 function useETClock() {
@@ -147,7 +149,7 @@ export default function App() {
 
       {/* ── header ── */}
       <header className="shrink-0 bg-panel border-b border-border flex items-center px-3 gap-4 h-9">
-        <span className="text-accent font-bold tracking-[0.2em] text-[11px] shrink-0">
+        <span className="text-accent font-bold tracking-[0.2em] text-[12px] shrink-0">
           ◈ CLAUDE FLOW
         </span>
 
@@ -155,7 +157,7 @@ export default function App() {
 
         {/* global symbol input */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="text-muted text-[10px]">SYM</span>
+          <span className="text-muted text-[11px]">SYM</span>
           <input
             className="t-input w-16 uppercase"
             value={symbolInput}
@@ -174,7 +176,7 @@ export default function App() {
               key={t.id}
               onClick={() => setTab(t.id)}
               title={`Press ${t.key}`}
-              className={`px-3 py-1 text-[10px] tracking-wider rounded transition-colors ${
+              className={`px-3 py-1 text-[11px] tracking-wider rounded transition-colors ${
                 tab === t.id
                   ? "bg-panel2 text-bright border border-border2"
                   : "text-muted hover:text-dim"
@@ -189,7 +191,7 @@ export default function App() {
         <div className="flex-1" />
 
         {/* stream status */}
-        <div className="flex items-center gap-1.5 text-[10px] text-muted shrink-0 max-w-xs overflow-hidden">
+        <div className="flex items-center gap-1.5 text-[11px] text-muted shrink-0 max-w-xs overflow-hidden">
           <span className="shrink-0">STREAM</span>
           <span className="text-dim truncate">
             {streamWatching.slice(0, 5).join(" · ")}
@@ -201,8 +203,8 @@ export default function App() {
 
         {/* market session */}
         <div className="flex items-center gap-2 shrink-0">
-          <span className={`text-[10px] ${sessionColor}`}>{sessionLabel}</span>
-          <span className="text-dim text-[10px] font-mono tabular-nums">{clock} ET</span>
+          <span className={`text-[11px] ${sessionColor}`}>{sessionLabel}</span>
+          <span className="text-dim text-[11px] font-mono tabular-nums">{clock} ET</span>
         </div>
       </header>
 
@@ -222,11 +224,12 @@ export default function App() {
         {tab === "flow"      && <FlowFeed symbol={undefined} />}
         {tab === "positions" && <PositionsDashboard />}
         {tab === "alerts"    && <AlertsPanel symbol={symbol} />}
+        {tab === "market"    && <MarketPanel />}
       </main>
 
       {/* ── status bar ── */}
       <footer className="shrink-0 bg-panel border-t border-border flex items-center px-3 h-5 gap-4">
-        <span className="text-muted text-[10px]">
+        <span className="text-muted text-[11px]">
           CLAUDE FLOW v0.1 · python · polygon.io
         </span>
 
@@ -234,18 +237,18 @@ export default function App() {
 
         {/* auth status */}
         {schwabLabel && (
-          <span className={`text-[10px] ${schwabColor}`}>{schwabLabel}</span>
+          <span className={`text-[11px] ${schwabColor}`}>{schwabLabel}</span>
         )}
 
         <div className="flex-1" />
 
-        <span className="text-muted text-[10px]">
-          keys: 1-7 tabs
+        <span className="text-muted text-[11px]">
+          keys: 1-8 tabs
         </span>
 
         <div className="w-px h-3 bg-border" />
 
-        <span className="text-muted text-[10px]">
+        <span className="text-muted text-[11px]">
           {new Date().toLocaleDateString("en-US", {
             weekday: "short", month: "short", day: "numeric", year: "numeric",
           })}

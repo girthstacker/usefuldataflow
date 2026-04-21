@@ -72,6 +72,11 @@ export const getNews = (params?: { ticker?: string; type?: string; limit?: numbe
 export const NEWS_STREAM_WS = () =>
   `ws://${location.host}/api/news/stream`;
 
+// Market data
+export const getFutures = () => api.get("/market/futures").then((r) => r.data);
+export const getCrypto  = () => api.get("/market/crypto").then((r) => r.data);
+export const MARKET_STREAM_WS = () => `ws://${location.host}/api/market/stream`;
+
 // Auth
 export const getAuthStatus = () => api.get("/auth/status").then((r) => r.data);
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getNews, NEWS_STREAM_WS } from "../api";
 
-const RSS_SOURCE_COUNT = 9; // keep in sync with backend RSS_SOURCES
+const RSS_SOURCE_COUNT = 10; // keep in sync with backend RSS_SOURCES
 
 interface NewsEvent {
   id: number;
@@ -15,15 +15,33 @@ interface NewsEvent {
   tags: string[];
   published_at: string | null;
   created_at: string | null;
+  trump_alert?: boolean;
   _new?: boolean;
 }
 
 // ── helpers ────────────────────────────────────────────────────────────────────
 
+function playTrumpAlert() {
+  try {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    [880, 660, 880].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      osc.connect(gain);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.1);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.1);
+    });
+  } catch {}
+}
+
 function timeAgo(iso: string | null): string {
   if (!iso) return "";
   const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-  if (diff < 60)   return `${Math.round(diff)}s ago`;
+  if (diff < 60)   return `<1m ago`;
   if (diff < 3600) return `${Math.round(diff / 60)}m ago`;
   if (diff < 86400) return `${Math.round(diff / 3600)}h ago`;
   return `${Math.round(diff / 86400)}d ago`;
@@ -45,8 +63,9 @@ function scoreBadgeClass(score: number) {
 // ── row ────────────────────────────────────────────────────────────────────────
 
 function NewsRow({ item }: { item: NewsEvent }) {
-  const isSec = item.source_type === "sec";
-  const time  = timeAgo(item.published_at || item.created_at);
+  const isSec   = item.source_type === "sec";
+  const isTrump = !!item.trump_alert;
+  const time    = timeAgo(item.published_at || item.created_at);
 
   return (
     <a
@@ -55,29 +74,29 @@ function NewsRow({ item }: { item: NewsEvent }) {
       rel="noopener noreferrer"
       className={`block border-b border-border px-3 py-2 hover:bg-panel2 transition-colors cursor-pointer
         ${item._new ? "row-new" : ""}
-        ${isSec ? "border-l-2 border-l-accent" : ""}`}
+        ${isTrump ? "border-l-4 border-l-gold bg-gold/5" : isSec ? "border-l-2 border-l-accent" : ""}`}
     >
       <div className="flex items-start gap-2">
         {/* score badge */}
-        <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded tabular-nums ${scoreBadgeClass(item.score)}`}>
+        <span className={`shrink-0 text-[11px] font-bold px-1.5 py-0.5 rounded tabular-nums ${scoreBadgeClass(item.score)}`}>
           {item.score}
         </span>
 
         {/* type icon */}
-        <span className="shrink-0 text-[13px] leading-none mt-0.5" title={item.source_type}>
+        <span className="shrink-0 text-[14px] leading-none mt-0.5" title={item.source_type}>
           {typeIcon(item.source_type)}
         </span>
 
         {/* body */}
         <div className="flex-1 min-w-0">
           {/* headline */}
-          <p className="text-[12px] text-bright font-medium leading-snug line-clamp-2">
+          <p className="text-[14px] text-bright font-semibold leading-snug line-clamp-2">
             {item.title}
           </p>
 
           {/* ai summary */}
           {item.ai_summary && (
-            <p className="text-[11px] text-dim mt-0.5 leading-snug line-clamp-1">
+            <p className="text-[13px] text-dim mt-0.5 leading-snug line-clamp-1">
               {item.ai_summary}
             </p>
           )}
@@ -85,14 +104,14 @@ function NewsRow({ item }: { item: NewsEvent }) {
           {/* meta row */}
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             {/* source */}
-            <span className="text-[10px] text-muted bg-panel2 border border-border px-1.5 py-0.5 rounded shrink-0">
+            <span className="text-[11px] text-muted bg-panel2 border border-border px-1.5 py-0.5 rounded shrink-0">
               {item.source}
             </span>
 
             {/* ticker pills */}
             {item.tickers.slice(0, 5).map((t) => (
               <span key={t}
-                className="text-[10px] text-accent bg-accent/10 border border-accent/30 px-1.5 py-0.5 rounded font-semibold">
+                className="text-[11px] text-accent bg-accent/10 border border-accent/30 px-1.5 py-0.5 rounded font-semibold">
                 {t}
               </span>
             ))}
@@ -100,7 +119,7 @@ function NewsRow({ item }: { item: NewsEvent }) {
             {/* tags */}
             {item.tags.slice(0, 2).map((tag) => (
               <span key={tag}
-                className="text-[9px] text-muted border border-border px-1 py-0.5 rounded">
+                className="text-[10px] text-muted border border-border px-1 py-0.5 rounded">
                 {tag}
               </span>
             ))}
@@ -108,7 +127,7 @@ function NewsRow({ item }: { item: NewsEvent }) {
             <div className="flex-1" />
 
             {/* time */}
-            <span className="text-[10px] text-muted shrink-0">{time}</span>
+            <span className="text-[11px] text-muted shrink-0">{time}</span>
           </div>
         </div>
       </div>
@@ -118,7 +137,7 @@ function NewsRow({ item }: { item: NewsEvent }) {
 
 // ── component ──────────────────────────────────────────────────────────────────
 
-type TypeFilter = "" | "news" | "social" | "sec";
+type TypeFilter = "" | "news" | "social" | "sec" | "trump";
 type WsStatus = "connecting" | "live" | "offline";
 
 export default function NewsFeed() {
@@ -137,7 +156,7 @@ export default function NewsFeed() {
 
   // load history
   useEffect(() => {
-    getNews({ type: typeFilter || undefined, ticker: tickerFilter || undefined, limit: 100 })
+    getNews({ type: typeFilter === "trump" ? "social" : typeFilter || undefined, ticker: tickerFilter || undefined, limit: 100 })
       .then((data: NewsEvent[]) => setItems(data))
       .catch(() => {});
   }, [typeFilter, tickerFilter]);
@@ -163,9 +182,12 @@ export default function NewsFeed() {
         }
 
         // apply current filters in closure — re-create on filter change
-        if (typeFilter && msg.source_type !== typeFilter) return;
+        const msgIsTrump = msg.trump_alert || msg.source === "Trump / Google News";
+        if (typeFilter === "trump" && !msgIsTrump) return;
+        if (typeFilter && typeFilter !== "trump" && msg.source_type !== typeFilter) return;
         if (tickerFilter && !msg.tickers.includes(tickerFilter.toUpperCase())) return;
 
+        if (msg.trump_alert) playTrumpAlert();
         setItems((prev) => [{ ...msg, _new: true }, ...prev].slice(0, 300));
       };
 
@@ -190,8 +212,9 @@ export default function NewsFeed() {
     setTickerFilter("");
   }
 
-  // SEC items always show, others filtered by type
   const displayed = items.filter((item) => {
+    const isTrump = item.trump_alert || item.source === "Trump / Google News";
+    if (typeFilter === "trump") return isTrump;
     if (item.source_type === "sec") return true;
     if (typeFilter && item.source_type !== typeFilter) return false;
     return true;
@@ -206,7 +229,7 @@ export default function NewsFeed() {
         {/* live dot */}
         <div className="flex items-center gap-1.5">
           <span className={`live-dot ${wsStatus !== "live" ? wsStatus : ""}`} />
-          <span className={`text-[10px] tracking-wider font-medium
+          <span className={`text-[11px] tracking-wider font-medium
             ${wsStatus === "live" ? "text-bull" : wsStatus === "connecting" ? "text-gold" : "text-bear"}`}>
             {wsStatus === "live" ? "LIVE" : wsStatus === "connecting" ? "CONNECTING" : "OFFLINE"}
           </span>
@@ -216,10 +239,10 @@ export default function NewsFeed() {
 
         {/* type filters */}
         <div className="flex gap-1">
-          {(["", "news", "social", "sec"] as const).map((t) => (
+          {(["", "news", "social", "sec", "trump"] as const).map((t) => (
             <button key={t} onClick={() => setTypeFilter(t)}
-              className={`t-btn text-[10px] ${typeFilter === t ? "active" : ""}`}>
-              {t === "" ? "ALL" : t === "news" ? "📰 NEWS" : t === "social" ? "👤 SOCIAL" : "🏛️ SEC"}
+              className={`t-btn text-[11px] ${typeFilter === t ? "active" : ""} ${t === "trump" ? "border-gold text-gold hover:border-gold hover:text-gold" : ""}`}>
+              {t === "" ? "ALL" : t === "news" ? "📰 NEWS" : t === "social" ? "👤 SOCIAL" : t === "sec" ? "🏛️ SEC" : "♔ TRUMP"}
             </button>
           ))}
         </div>
@@ -229,18 +252,18 @@ export default function NewsFeed() {
         {/* ticker filter */}
         <div className="flex items-center gap-1">
           <input
-            className="t-input w-20 uppercase text-[10px]"
+            className="t-input w-20 uppercase text-[11px]"
             placeholder="ticker…"
             value={tickerInput}
             onChange={(e) => setTickerInput(e.target.value.toUpperCase())}
             onKeyDown={(e) => e.key === "Enter" && applyTickerFilter()}
           />
           {tickerFilter ? (
-            <button className="t-btn text-[10px] border-accent text-accent" onClick={clearTickerFilter}>
+            <button className="t-btn text-[11px] border-accent text-accent" onClick={clearTickerFilter}>
               {tickerFilter} ✕
             </button>
           ) : (
-            <button className="t-btn text-[10px]" onClick={applyTickerFilter}>GO</button>
+            <button className="t-btn text-[11px]" onClick={applyTickerFilter}>GO</button>
           )}
         </div>
 
@@ -250,7 +273,7 @@ export default function NewsFeed() {
             {allTickers.slice(0, 8).map((t) => (
               <button key={t}
                 onClick={() => { setTickerInput(t); setTickerFilter(t); }}
-                className="text-[9px] text-accent bg-accent/10 border border-accent/20 px-1.5 py-0.5 rounded hover:bg-accent/20 transition-colors">
+                className="text-[10px] text-accent bg-accent/10 border border-accent/20 px-1.5 py-0.5 rounded hover:bg-accent/20 transition-colors">
                 {t}
               </button>
             ))}
@@ -259,13 +282,13 @@ export default function NewsFeed() {
 
         <div className="flex-1" />
 
-        <span className="text-[10px] text-muted shrink-0">
+        <span className="text-[11px] text-muted shrink-0">
           <span className="text-dim">{displayed.length}</span> items · polls every 90s
         </span>
       </div>
 
       {/* ── score legend ── */}
-      <div className="shrink-0 flex items-center gap-4 px-3 py-1 border-b border-border bg-panel2 text-[10px]">
+      <div className="shrink-0 flex items-center gap-4 px-3 py-1 border-b border-border bg-panel2 text-[11px]">
         <span className="text-muted">SCORE</span>
         <span className="bg-panel2 text-muted border border-border px-1.5 rounded">3-4 low</span>
         <span className="bg-gold/20 text-gold border border-gold/40 px-1.5 rounded">5-6 relevant</span>
@@ -279,7 +302,7 @@ export default function NewsFeed() {
         {displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-40 gap-2">
             <span className={`live-dot ${wsStatus !== "live" ? wsStatus : ""}`} />
-            <span className="text-muted text-[11px]">
+            <span className="text-muted text-[12px]">
               {wsStatus === "live"
                 ? "Waiting for news items (polls every 90s)…"
                 : "Connecting to news stream…"}
@@ -291,7 +314,7 @@ export default function NewsFeed() {
       </div>
 
       {/* ── footer ── */}
-      <div className="shrink-0 border-t border-border px-3 py-1 flex items-center gap-4 text-[10px] text-muted bg-panel">
+      <div className="shrink-0 border-t border-border px-3 py-1 flex items-center gap-4 text-[11px] text-muted bg-panel">
         <span>{displayed.length} items shown · score ≥ 3 · SEC always shown</span>
         <div className="flex-1" />
         <span>

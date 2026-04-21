@@ -64,7 +64,7 @@ function CallCells({ c }: { c: Contract | undefined }) {
       <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-dim`}>
         {f2(c?.delta)}
       </td>
-      <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-muted text-[10px]`}>
+      <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-muted text-[11px]`}>
         {c?.iv != null ? `${(c.iv * 100).toFixed(0)}%` : "—"}
       </td>
     </>
@@ -77,7 +77,7 @@ function PutCells({ c }: { c: Contract | undefined }) {
   const hl = itm ? "text-bear" : "text-dim";
   return (
     <>
-      <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-muted text-[10px]`}>
+      <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-muted text-[11px]`}>
         {c?.iv != null ? `${(c.iv * 100).toFixed(0)}%` : "—"}
       </td>
       <td className={`px-2 py-[3px] text-right tabular-nums ${bg} text-dim`}>
@@ -170,7 +170,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
       <div className="shrink-0 flex items-center gap-3 px-3 py-2 border-b border-border bg-panel flex-wrap">
         {/* symbol input */}
         <div className="flex items-center gap-1.5">
-          <span className="text-muted text-[10px]">TICKER</span>
+          <span className="text-muted text-[11px]">TICKER</span>
           <input
             className="t-input w-16 uppercase"
             value={inputSym}
@@ -181,7 +181,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
         </div>
 
         {underlying != null && (
-          <span className="text-dim text-[11px]">
+          <span className="text-dim text-[12px]">
             underlying <span className="text-bright font-medium">${underlying.toFixed(2)}</span>
           </span>
         )}
@@ -194,9 +194,9 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
             const dte = Math.round((new Date(exp).getTime() - Date.now()) / 86400000);
             return (
               <button key={exp} onClick={() => setSelectedExp(exp)}
-                className={`t-btn text-[10px] ${selectedExp === exp ? "active" : ""}`}>
+                className={`t-btn text-[11px] ${selectedExp === exp ? "active" : ""}`}>
                 {exp.slice(5)}
-                <span className="text-muted ml-1 text-[9px]">{dte}d</span>
+                <span className="text-muted ml-1 text-[10px]">{dte}d</span>
               </button>
             );
           })}
@@ -209,7 +209,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
           {(["", "call", "put"] as const).map((t) => (
             <button key={t}
               onClick={() => { setContractType(t); }}
-              className={`t-btn text-[10px] ${
+              className={`t-btn text-[11px] ${
                 contractType === t
                   ? t === "call" ? "border-bull text-bull"
                   : t === "put"  ? "border-bear text-bear"
@@ -223,14 +223,14 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
 
         <div className="flex-1" />
 
-        {loading && <span className="text-muted text-[10px]">loading…</span>}
+        {loading && <span className="text-muted text-[11px]">loading…</span>}
         {!loading && strikes.length > 0 && (
-          <span className="text-muted text-[10px]">{strikes.length} strikes · polygon</span>
+          <span className="text-muted text-[11px]">{strikes.length} strikes · polygon</span>
         )}
       </div>
 
       {error && (
-        <div className="shrink-0 px-3 py-2 text-bear text-[11px] border-b border-border">
+        <div className="shrink-0 px-3 py-2 text-bear text-[12px] border-b border-border">
           {error}
         </div>
       )}
@@ -241,7 +241,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
           <table className="w-full">
             <thead className="sticky top-0 z-10">
               {/* section labels */}
-              <tr className="bg-panel text-[10px]">
+              <tr className="bg-panel text-[11px]">
                 <th colSpan={6} className="text-center py-1 text-bull tracking-widest border-b border-border">
                   ── CALLS ──
                 </th>
@@ -253,7 +253,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
                 </th>
               </tr>
               {/* column names */}
-              <tr className="bg-panel2 border-b border-border text-[9px] text-muted uppercase tracking-wide">
+              <tr className="bg-panel2 border-b border-border text-[10px] text-muted uppercase tracking-wide">
                 <th className="px-2 py-1 text-right">Bid</th>
                 <th className="px-2 py-1 text-right">Ask</th>
                 <th className="px-2 py-1 text-right">Vol</th>
@@ -275,7 +275,7 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
                 const isAtm = strike === atmStrike;
                 return (
                   <tr key={strike}
-                    className={`border-b border-border text-[11px] tabular-nums
+                    className={`border-b border-border text-[12px] tabular-nums
                       ${isAtm ? "bg-accent/5 border-y border-accent/20" : "hover:bg-panel2/50"}`}>
                     <CallCells c={row.call} />
                     <td className={`px-4 py-[3px] text-center font-semibold border-x border-border2
@@ -293,14 +293,14 @@ export default function OptionsChain({ symbol, onSymbolChange }: Props) {
       )}
 
       {!loading && !selectedExp && !error && (
-        <div className="flex-1 flex items-center justify-center text-muted text-[11px]">
+        <div className="flex-1 flex items-center justify-center text-muted text-[12px]">
           Enter a ticker above to load the options chain
         </div>
       )}
 
       {/* ── legend ── */}
       <div className="shrink-0 border-t border-border px-3 py-1 flex gap-4
-                      text-[10px] text-muted bg-panel">
+                      text-[11px] text-muted bg-panel">
         <span className="text-bull">■ ITM call</span>
         <span className="text-bear">■ ITM put</span>
         <span className="text-accent">— ATM strike</span>

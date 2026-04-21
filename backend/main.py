@@ -11,7 +11,8 @@ from backend.services import schwab
 from backend.services.polygon import flow_manager
 from backend.services.alert_manager import alert_manager
 from backend.services.news_feed import news_manager
-from backend.routers import alerts, auth, news, options, positions, quotes
+from backend.services.market_data import market_manager
+from backend.routers import alerts, auth, news, options, positions, quotes, market
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,9 +35,11 @@ async def lifespan(app: FastAPI):
     logger.info("Flow stream watching %d symbols", len(stream_symbols))
     await alert_manager.start_price_polling()
     await news_manager.start(stream_symbols)
+    await market_manager.start()
 
     yield
 
+    await market_manager.stop()
     await news_manager.stop()
     await alert_manager.stop()
     await flow_manager.stop()
@@ -58,6 +61,7 @@ app.include_router(positions.router)
 app.include_router(options.router)
 app.include_router(alerts.router)
 app.include_router(news.router)
+app.include_router(market.router)
 
 
 @app.get("/health")

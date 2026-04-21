@@ -79,7 +79,7 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
   return (
     <div
       className={`border-l-2 ${scoreBg(ev.flow_score)} border-b border-border
-        flex items-center gap-0 text-[11px] tabular-nums
+        flex items-center gap-0 text-[12px] tabular-nums
         ${ev._new ? "row-new" : ""}
         hover:bg-panel2 transition-colors cursor-default`}
     >
@@ -101,12 +101,12 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
       </div>
 
       {/* expiry */}
-      <div className="w-[52px] shrink-0 px-1 py-[5px] text-dim text-[10px]">
+      <div className="w-[52px] shrink-0 px-1 py-[5px] text-dim text-[11px]">
         {exp}
       </div>
 
       {/* DTE */}
-      <div className={`w-[36px] shrink-0 px-1 py-[5px] text-right text-[10px]
+      <div className={`w-[36px] shrink-0 px-1 py-[5px] text-right text-[11px]
         ${dte != null && dte <= 7 ? "text-bear" : dte != null && dte <= 30 ? "text-gold" : "text-muted"}`}>
         {dte != null ? `${dte}d` : "—"}
       </div>
@@ -130,14 +130,14 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
       </div>
 
       {/* IV */}
-      <div className="w-[48px] shrink-0 px-1 py-[5px] text-right text-muted text-[10px]">
+      <div className="w-[48px] shrink-0 px-1 py-[5px] text-right text-muted text-[11px]">
         {ev.implied_volatility ? `${(ev.implied_volatility * 100).toFixed(0)}%` : "—"}
       </div>
 
       {/* sweep badge */}
       <div className="w-[52px] shrink-0 px-1 py-[5px] text-center">
         {ev.is_sweep && (
-          <span className="text-[9px] font-bold text-gold bg-gold/10 border border-gold/30
+          <span className="text-[10px] font-bold text-gold bg-gold/10 border border-gold/30
                            px-1 py-0.5 rounded tracking-wider">
             SWP
           </span>
@@ -148,7 +148,7 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
       <div className="flex-1 px-1 py-[5px] flex gap-1 flex-wrap min-w-0 overflow-hidden">
         {flags.slice(0, 3).map((f) => (
           <span key={f}
-            className="text-[9px] text-muted bg-panel2 border border-border px-1 rounded whitespace-nowrap">
+            className="text-[10px] text-muted bg-panel2 border border-border px-1 rounded whitespace-nowrap">
             {f}
           </span>
         ))}
@@ -156,7 +156,7 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
 
       {/* score */}
       <div className={`w-[56px] shrink-0 px-1 py-[5px] text-right`}>
-        <span className={`text-[10px] ${scoreClass(ev.flow_score)}`}>
+        <span className={`text-[11px] ${scoreClass(ev.flow_score)}`}>
           {ev.flow_score > 0 ? scoreLabel(ev.flow_score) : ""}
         </span>
         <span className={`ml-1 font-bold ${scoreClass(ev.flow_score)}`}>
@@ -165,7 +165,7 @@ function FlowRow({ ev }: { ev: FlowEvent }) {
       </div>
 
       {/* time */}
-      <div className="w-[52px] shrink-0 px-2 py-[5px] text-right text-muted text-[10px]">
+      <div className="w-[52px] shrink-0 px-2 py-[5px] text-right text-muted text-[11px]">
         {new Date(ev.detected_at).toLocaleTimeString([], {
           hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
         })}
@@ -246,7 +246,7 @@ export default function FlowFeed({ symbol }: Props) {
         {/* live indicator */}
         <div className="flex items-center gap-1.5">
           <span className={`live-dot ${wsStatus !== "live" ? wsStatus : ""}`} />
-          <span className={`text-[10px] tracking-wider font-medium
+          <span className={`text-[11px] tracking-wider font-medium
             ${wsStatus === "live" ? "text-bull" : wsStatus === "connecting" ? "text-gold" : "text-bear"}`}>
             {wsStatus === "live" ? "LIVE" : wsStatus === "connecting" ? "CONNECTING" : "OFFLINE"}
           </span>
@@ -256,7 +256,7 @@ export default function FlowFeed({ symbol }: Props) {
 
         {/* score filter */}
         <div className="flex items-center gap-1">
-          <span className="text-muted text-[10px] mr-1">SCORE</span>
+          <span className="text-muted text-[11px] mr-1">SCORE</span>
           {[1, 3, 5, 8].map((s) => (
             <button key={s} onClick={() => setMinScore(s)}
               className={`t-btn ${minScore === s ? "active" : ""}`}>
@@ -271,7 +271,7 @@ export default function FlowFeed({ symbol }: Props) {
         <div className="flex gap-1">
           {(["", "call", "put"] as const).map((t) => (
             <button key={t} onClick={() => setTypeFilter(t)}
-              className={`t-btn text-[10px] ${
+              className={`t-btn text-[11px] ${
                 typeFilter === t
                   ? t === "call" ? "border-bull text-bull"
                   : t === "put"  ? "border-bear text-bear"
@@ -287,7 +287,7 @@ export default function FlowFeed({ symbol }: Props) {
 
         {/* sweep filter */}
         <button onClick={() => setSweepOnly((v) => !v)}
-          className={`t-btn text-[10px] ${sweepOnly ? "border-gold text-gold" : ""}`}>
+          className={`t-btn text-[11px] ${sweepOnly ? "border-gold text-gold" : ""}`}>
           SWEEPS ONLY
         </button>
 
@@ -296,19 +296,19 @@ export default function FlowFeed({ symbol }: Props) {
         {/* view toggle */}
         <div className="flex gap-1">
           <button onClick={() => setView("list")}
-            className={`t-btn text-[10px] ${view === "list" ? "active" : ""}`}>LIST</button>
+            className={`t-btn text-[11px] ${view === "list" ? "active" : ""}`}>LIST</button>
           <button onClick={() => setView("stats")}
-            className={`t-btn text-[10px] ${view === "stats" ? "active" : ""}`}>STATS</button>
+            className={`t-btn text-[11px] ${view === "stats" ? "active" : ""}`}>STATS</button>
         </div>
 
         {view === "stats" && (
           <>
             <div className="w-px h-4 bg-border" />
             <div className="flex items-center gap-1">
-              <span className="text-muted text-[10px] mr-1">WINDOW</span>
+              <span className="text-muted text-[11px] mr-1">WINDOW</span>
               {[6, 24, 48, 168].map((h) => (
                 <button key={h} onClick={() => setStatsHours(h)}
-                  className={`t-btn text-[10px] ${statsHours === h ? "active" : ""}`}>
+                  className={`t-btn text-[11px] ${statsHours === h ? "active" : ""}`}>
                   {h < 24 ? `${h}h` : h === 168 ? "7d" : `${h / 24}d`}
                 </button>
               ))}
@@ -320,7 +320,7 @@ export default function FlowFeed({ symbol }: Props) {
 
         {/* counters (list view only) */}
         {view === "list" && (
-          <div className="flex items-center gap-3 text-[10px] text-muted">
+          <div className="flex items-center gap-3 text-[11px] text-muted">
             <span><span className="text-dim">{eventCount}</span> new</span>
             <span><span className="text-dim">{displayed.length}</span> shown</span>
             {symbol && <span className="text-accent">{symbol}</span>}
@@ -336,7 +336,7 @@ export default function FlowFeed({ symbol }: Props) {
         <>
           {/* column headers */}
           <div className="shrink-0 flex items-center border-b border-border bg-panel2
-                          text-[10px] text-muted uppercase tracking-wide">
+                          text-[11px] text-muted uppercase tracking-wide">
             <div className="w-[72px] shrink-0 px-3 py-1">Ticker</div>
             <div className="w-[40px] shrink-0 px-1 py-1 text-center">T</div>
             <div className="w-[64px] shrink-0 px-1 py-1 text-right">Strike</div>
@@ -357,7 +357,7 @@ export default function FlowFeed({ symbol }: Props) {
             {displayed.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-40 gap-2">
                 <span className={`live-dot ${wsStatus !== "live" ? wsStatus : ""}`} />
-                <span className="text-muted text-[11px]">
+                <span className="text-muted text-[12px]">
                   {wsStatus === "live"
                     ? `Streaming — waiting for score ≥ ${minScore} flow…`
                     : "Connecting to flow stream…"}
@@ -370,7 +370,7 @@ export default function FlowFeed({ symbol }: Props) {
 
           {/* score legend */}
           <div className="shrink-0 border-t border-border px-3 py-1 flex items-center gap-4
-                          text-[10px] text-muted bg-panel">
+                          text-[11px] text-muted bg-panel">
             <span className="score-notable">● NOTABLE ≥3</span>
             <span className="score-unusual">● UNUSUAL ≥6</span>
             <span className="score-extreme">● EXTREME ≥9</span>

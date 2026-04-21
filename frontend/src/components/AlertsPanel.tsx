@@ -81,17 +81,17 @@ function FlashBanner({ trigger, onDismiss }: { trigger: TriggerMsg; onDismiss: (
   const isCall = trigger.condition === "flow_score_above";
   return (
     <div className="shrink-0 flex items-center gap-3 px-4 py-2.5 bg-gold/10 border-b border-gold/40
-                    text-[11px] animate-pulse">
+                    text-[12px] animate-pulse">
       <span className="text-gold font-bold tracking-wider">ALERT TRIGGERED</span>
       <span className="text-bright font-semibold">{trigger.symbol}</span>
       <span className="text-dim">{CONDITION_LABELS[trigger.condition]}</span>
       <span className="text-gold font-mono">{formatThreshold(trigger.condition, trigger.threshold)}</span>
       {trigger.message && <span className="text-muted">{trigger.message}</span>}
       <div className="flex-1" />
-      <span className="text-muted text-[10px]">
+      <span className="text-muted text-[11px]">
         {new Date(trigger.triggered_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
       </span>
-      <button onClick={onDismiss} className="text-muted hover:text-bright text-[10px] ml-1">✕</button>
+      <button onClick={onDismiss} className="text-muted hover:text-bright text-[11px] ml-1">✕</button>
     </div>
   );
 }
@@ -102,7 +102,7 @@ function AlertItem({ a, onToggle, onDelete }: {
   onDelete: (id: number) => void;
 }) {
   return (
-    <div className={`flex items-center gap-2 text-[11px] border-b border-border tabular-nums
+    <div className={`flex items-center gap-2 text-[12px] border-b border-border tabular-nums
       ${a.triggered ? "bg-gold/5" : ""}
       ${!a.active ? "opacity-40" : "hover:bg-panel2/50"}
       transition-colors`}>
@@ -114,7 +114,7 @@ function AlertItem({ a, onToggle, onDelete }: {
       <div className="flex-1 px-1 py-[5px] text-muted truncate">{a.message ?? ""}</div>
 
       {a.triggered && (
-        <div className="shrink-0 px-2 py-[5px] text-gold text-[10px] whitespace-nowrap">
+        <div className="shrink-0 px-2 py-[5px] text-gold text-[11px] whitespace-nowrap">
           ✓ {a.triggered_at
             ? new Date(a.triggered_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
             : "triggered"}
@@ -124,13 +124,13 @@ function AlertItem({ a, onToggle, onDelete }: {
       <div className="shrink-0 px-1 py-[5px]">
         <button
           onClick={() => onToggle(a.id, a.active)}
-          className={`t-btn text-[10px] ${a.active ? "border-bull text-bull" : ""}`}>
+          className={`t-btn text-[11px] ${a.active ? "border-bull text-bull" : ""}`}>
           {a.active ? "ON" : "OFF"}
         </button>
       </div>
 
       <div className="shrink-0 px-2 py-[5px]">
-        <button onClick={() => onDelete(a.id)} className="text-muted hover:text-bear text-[10px] leading-none">✕</button>
+        <button onClick={() => onDelete(a.id)} className="text-muted hover:text-bear text-[11px] leading-none">✕</button>
       </div>
     </div>
   );
@@ -249,7 +249,7 @@ export default function AlertsPanel({ symbol }: Props) {
 
           {/* condition */}
           <select
-            className="t-input text-[11px] bg-surface"
+            className="t-input text-[12px] bg-surface"
             value={form.condition}
             onChange={(e) => setForm((f) => ({ ...f, condition: e.target.value as Condition }))}
           >
@@ -277,14 +277,14 @@ export default function AlertsPanel({ symbol }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
           />
 
-          <button type="submit" disabled={saving} className="t-btn text-[10px] border-accent text-accent">
+          <button type="submit" disabled={saving} className="t-btn text-[11px] border-accent text-accent">
             {saving ? "saving…" : "+ ADD"}
           </button>
         </form>
       </div>
 
       {/* WS status bar */}
-      <div className="shrink-0 flex items-center gap-2 px-3 py-1.5 border-b border-border bg-panel2 text-[10px]">
+      <div className="shrink-0 flex items-center gap-2 px-3 py-1.5 border-b border-border bg-panel2 text-[11px]">
         <span className={`live-dot ${wsStatus !== "live" ? wsStatus : ""}`} />
         <span className={wsStatus === "live" ? "text-bull" : wsStatus === "connecting" ? "text-gold" : "text-bear"}>
           {wsStatus === "live" ? "LIVE" : wsStatus === "connecting" ? "CONNECTING" : "OFFLINE"}
@@ -296,7 +296,7 @@ export default function AlertsPanel({ symbol }: Props) {
       </div>
 
       {/* column headers */}
-      <div className="shrink-0 flex text-[9px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
+      <div className="shrink-0 flex text-[10px] text-muted uppercase tracking-wide bg-panel2 border-b border-border">
         <div className="w-[72px] shrink-0 px-3 py-1">Symbol</div>
         <div className="w-[140px] shrink-0 px-1 py-1">Condition</div>
         <div className="w-[80px] shrink-0 px-1 py-1 text-right">Threshold</div>
@@ -309,7 +309,7 @@ export default function AlertsPanel({ symbol }: Props) {
       {/* rows */}
       <div className="flex-1 overflow-y-auto">
         {alerts.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-muted text-[11px]">
+          <div className="flex items-center justify-center h-32 text-muted text-[12px]">
             No alerts configured — create one above
           </div>
         ) : (
@@ -322,7 +322,7 @@ export default function AlertsPanel({ symbol }: Props) {
       </div>
 
       {/* legend */}
-      <div className="shrink-0 border-t border-border px-3 py-1 flex gap-4 text-[10px] text-muted bg-panel">
+      <div className="shrink-0 border-t border-border px-3 py-1 flex gap-4 text-[11px] text-muted bg-panel">
         <span className="text-bull">■ active</span>
         <span className="text-gold">■ triggered</span>
         <span className="text-dim">■ paused</span>

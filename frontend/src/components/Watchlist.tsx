@@ -154,7 +154,7 @@ export default function Watchlist({ onSelectSymbol }: Props) {
           onKeyDown={(e) => e.key === "Enter" && addSymbol()}
         />
         <button className="t-btn" onClick={addSymbol}>ADD</button>
-        <span className="text-muted text-[10px] ml-2">
+        <span className="text-muted text-[11px] ml-2">
           polling every 5s · schwab pending
         </span>
       </div>
@@ -163,7 +163,7 @@ export default function Watchlist({ onSelectSymbol }: Props) {
       <div className="flex-1 overflow-auto">
         <table className="w-full">
           <thead className="sticky top-0 bg-panel z-10">
-            <tr className="border-b border-border text-[10px] text-muted uppercase tracking-wider">
+            <tr className="border-b border-border text-[11px] text-muted uppercase tracking-wider">
               <th className="px-3 py-1.5 text-left w-6">#</th>
               <th className="px-3 py-1.5 text-left">Symbol</th>
               <th className="px-3 py-1.5 text-right">Last</th>
@@ -196,7 +196,7 @@ export default function Watchlist({ onSelectSymbol }: Props) {
                     ${isSelected ? "bg-panel2" : "hover:bg-panel2/60"}
                   `}
                 >
-                  <td className="px-3 py-1.5 text-muted text-[10px]">{i + 1}</td>
+                  <td className="px-3 py-1.5 text-muted text-[11px]">{i + 1}</td>
 
                   <td className="px-3 py-1.5">
                     <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function Watchlist({ onSelectSymbol }: Props) {
                   <td className="px-3 py-1.5 text-right">
                     <button
                       onClick={(e) => { e.stopPropagation(); removeSymbol(sym); }}
-                      className="text-muted hover:text-bear text-[10px] leading-none"
+                      className="text-muted hover:text-bear text-[11px] leading-none"
                     >
                       ✕
                     </button>
@@ -248,14 +248,14 @@ export default function Watchlist({ onSelectSymbol }: Props) {
         </table>
 
         {symbols.length === 0 && (
-          <div className="flex items-center justify-center h-32 text-muted text-[10px]">
+          <div className="flex items-center justify-center h-32 text-muted text-[11px]">
             Add tickers above to populate watchlist
           </div>
         )}
       </div>
 
       {/* legend */}
-      <div className="shrink-0 border-t border-border px-3 py-1.5 flex items-center gap-4 text-[10px] text-muted">
+      <div className="shrink-0 border-t border-border px-3 py-1.5 flex items-center gap-4 text-[11px] text-muted">
         <span className="text-bull">▲ up</span>
         <span className="text-bear">▼ down</span>
         <span>click row → open chart</span>

@@ -109,7 +109,7 @@ function SummaryCards({ s }: { s: Summary }) {
     <div className="shrink-0 flex gap-6 px-4 py-3 border-b border-border bg-panel flex-wrap">
       {metrics.map(({ label, value, color }) => (
         <div key={label} className="flex flex-col gap-0.5">
-          <span className="text-[9px] text-muted tracking-widest uppercase">{label}</span>
+          <span className="text-[10px] text-muted tracking-widest uppercase">{label}</span>
           <span className={`text-sm font-semibold tabular-nums ${color}`}>{value}</span>
         </div>
       ))}
@@ -132,7 +132,7 @@ function CpBar({ callPct }: { callPct: number }) {
 
 function Leaderboard({ rows }: { rows: SymbolRow[] }) {
   if (!rows.length) return (
-    <div className="flex items-center justify-center h-32 text-muted text-[11px]">
+    <div className="flex items-center justify-center h-32 text-muted text-[12px]">
       No flow data in this window
     </div>
   );
@@ -142,7 +142,7 @@ function Leaderboard({ rows }: { rows: SymbolRow[] }) {
   return (
     <div className="flex-1 overflow-y-auto">
       {/* headers */}
-      <div className="flex items-center text-[9px] text-muted uppercase tracking-wide
+      <div className="flex items-center text-[10px] text-muted uppercase tracking-wide
                       border-b border-border px-3 py-1 bg-panel2 sticky top-0 z-10">
         <div className="w-[72px] shrink-0">Symbol</div>
         <div className="flex-1">Premium bar</div>
@@ -160,12 +160,12 @@ function Leaderboard({ rows }: { rows: SymbolRow[] }) {
 
         return (
           <div key={r.symbol}
-            className="flex items-center text-[11px] tabular-nums border-b border-border
+            className="flex items-center text-[12px] tabular-nums border-b border-border
                        hover:bg-panel2/60 transition-colors px-3 py-[5px]">
 
             {/* rank + symbol */}
             <div className="w-[72px] shrink-0 flex items-center gap-2">
-              <span className="text-muted text-[10px] w-4 text-right">{i + 1}</span>
+              <span className="text-muted text-[11px] w-4 text-right">{i + 1}</span>
               <span className="font-bold text-bright">{r.symbol}</span>
             </div>
 
@@ -230,8 +230,8 @@ function HourTooltip({ active, payload }: HourTooltipProps) {
   const etHour = ((parseInt(b.hour) - 4) + 24) % 24;
   const label = `${String(etHour).padStart(2, "0")}:00 ET`;
   return (
-    <div className="bg-panel2 border border-border2 rounded px-3 py-2 text-[11px] font-mono">
-      <div className="text-muted text-[10px] mb-1">{label}</div>
+    <div className="bg-panel2 border border-border2 rounded px-3 py-2 text-[12px] font-mono">
+      <div className="text-muted text-[11px] mb-1">{label}</div>
       <div className="text-bright font-semibold">{fmtP(b.premium)}</div>
       <div className="text-dim">{b.count} trades · {b.sweeps} sweeps</div>
     </div>
@@ -248,7 +248,7 @@ function HourlyChart({ data }: { data: HourBucket[] }) {
 
   return (
     <div className="shrink-0 border-t border-border" style={{ height: 120 }}>
-      <div className="px-3 py-1 text-[10px] text-muted uppercase tracking-widest">
+      <div className="px-3 py-1 text-[11px] text-muted uppercase tracking-widest">
         Activity by hour (ET) · {data.length} buckets
       </div>
       <ResponsiveContainer width="100%" height={88}>
@@ -298,7 +298,7 @@ function TopTrades({ trades }: { trades: TopTrade[] }) {
   if (!trades.length) return null;
   return (
     <div className="shrink-0 border-t border-border px-3 py-2">
-      <div className="text-[10px] text-muted uppercase tracking-widest mb-1.5">
+      <div className="text-[11px] text-muted uppercase tracking-widest mb-1.5">
         Top trades by premium
       </div>
       <div className="flex flex-col gap-0.5">
@@ -309,23 +309,23 @@ function TopTrades({ trades }: { trades: TopTrade[] }) {
             : null;
           return (
             <div key={t.id}
-              className="flex items-center gap-3 text-[11px] tabular-nums py-0.5">
+              className="flex items-center gap-3 text-[12px] tabular-nums py-0.5">
               <span className="font-bold text-bright w-[52px]">{t.symbol}</span>
               <span className={`w-[16px] font-semibold ${isCall ? "text-bull" : "text-bear"}`}>
                 {isCall ? "C" : "P"}
               </span>
               <span className="text-dim w-[52px]">${t.strike}</span>
-              <span className="text-muted text-[10px] w-[44px]">{t.expiry?.slice(5)}</span>
+              <span className="text-muted text-[11px] w-[44px]">{t.expiry?.slice(5)}</span>
               {dte != null && (
-                <span className={`text-[10px] w-[28px] ${dte <= 7 ? "text-bear" : "text-muted"}`}>
+                <span className={`text-[11px] w-[28px] ${dte <= 7 ? "text-bear" : "text-muted"}`}>
                   {dte}d
                 </span>
               )}
               <span className="font-bold text-bright">{fmtP(t.premium)}</span>
               {t.is_sweep && (
-                <span className="text-[9px] text-gold bg-gold/10 border border-gold/30 px-1 rounded">SWP</span>
+                <span className="text-[10px] text-gold bg-gold/10 border border-gold/30 px-1 rounded">SWP</span>
               )}
-              <span className={`ml-auto text-[10px] font-semibold
+              <span className={`ml-auto text-[11px] font-semibold
                 ${t.flow_score >= 9 ? "text-extreme"
                 : t.flow_score >= 6 ? "text-gold"
                 : "text-bull"}`}>
@@ -357,19 +357,19 @@ export default function FlowStats({ hours, minScore }: Props) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center text-muted text-[11px]">
+      <div className="flex-1 flex items-center justify-center text-muted text-[12px]">
         loading stats…
       </div>
     );
   }
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center text-bear text-[11px]">{error}</div>
+      <div className="flex-1 flex items-center justify-center text-bear text-[12px]">{error}</div>
     );
   }
   if (!data || data.summary.total_count === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center text-muted text-[11px]">
+      <div className="flex-1 flex items-center justify-center text-muted text-[12px]">
         No flow data in the last {hours}h — stream events will appear here once detected
       </div>
     );
